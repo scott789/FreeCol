@@ -7978,8 +7978,9 @@ javax.swing.border.BevelBorder
 javax.swing.border.EmptyBorder
 net.sf.freecol.client.gui.action.QuitAction
 net.sf.freecol.client.gui.action.ActionManager
-java.awt.Image
+net.sf.freecol.client.gui.action.ContinueAction
 java.lang.String
+java.awt.Image
 net.sf.freecol.client.gui.action.OpenAction
 ||:net.sf.freecol.client.gui.video.VideoComponent
 javax.swing.JPanel
