@@ -416,6 +416,363 @@ public final class FreeCol {
         }
         return null;
     }
+    
+    private static void addHelpOptions(Options options, String help) {
+    	options.addOption(OptionBuilder.withLongOpt("usage")
+                .withDescription(help)
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("help")
+                .withDescription(help)
+                .create());
+    }
+    
+    private static void addSpecialOptions(Options options, String help, String argDirectory) {
+    	options.addOption(OptionBuilder.withLongOpt("freecol-data")
+                .withDescription(Messages.message("cli.freecol-data"))
+                .withArgName(argDirectory)
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("default-locale")
+                .withDescription(Messages.message("cli.default-locale"))
+                .withArgName(Messages.message("cli.arg.locale"))
+                .hasArg()
+                .create());
+    }
+    
+    private static void addOrdinaryOptions(Options options, String help, File dummy, String argDirectory) {
+    	options.addOption(OptionBuilder.withLongOpt("advantages")
+                .withDescription(Messages.message(StringTemplate
+                        .template("cli.advantages")
+                        .addName("%advantages%", getValidAdvantages())))
+                .withArgName(Messages.message("cli.arg.advantages"))
+                .hasArg()
+                .create());
+
+    	options.addOption(OptionBuilder.withLongOpt("check-savegame")
+                .withDescription(Messages.message("cli.check-savegame"))
+                .withArgName(Messages.message("cli.arg.file"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("clientOptions")
+                .withDescription(Messages.message("cli.clientOptions"))
+                .withArgName(Messages.message("cli.arg.clientOptions"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("debug")
+                .withDescription(Messages.message(StringTemplate
+                        .template("cli.debug")
+                        .addName("%modes%", FreeColDebugger.getDebugModes())))
+                .withArgName(Messages.message("cli.arg.debug"))
+                .hasOptionalArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("debug-run")
+                .withDescription(Messages.message("cli.debug-run"))
+                .withArgName(Messages.message("cli.arg.debugRun"))
+                .hasOptionalArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("debug-start")
+                .withDescription(Messages.message("cli.debug-start"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("difficulty")
+                .withDescription(Messages.message("cli.difficulty"))
+                .withArgName(Messages.message("cli.arg.difficulty"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("europeans")
+                .withDescription(Messages.message("cli.european-count"))
+                .withArgName(Messages.message("cli.arg.europeans"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("fast")
+                .withDescription(Messages.message("cli.fast"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("font")
+                .withDescription(Messages.message("cli.font"))
+                .withArgName(Messages.message("cli.arg.font"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("full-screen")
+                .withDescription(Messages.message("cli.full-screen"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("gui-scale")
+                .withDescription(Messages.message(StringTemplate
+                        .template("cli.gui-scale")
+                        .addName("%scales%", getValidGUIScales())))
+                .withArgName(Messages.message("cli.arg.gui-scale"))
+                .hasOptionalArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("headless")
+                .withDescription(Messages.message("cli.headless"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("load-savegame")
+                .withDescription(Messages.message("cli.load-savegame"))
+                .withArgName(Messages.message("cli.arg.file"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("log-console")
+                .withDescription(Messages.message("cli.log-console"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("log-file")
+                .withDescription(Messages.message("cli.log-file"))
+                .withArgName(Messages.message("cli.arg.name"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("log-level")
+                .withDescription(Messages.message("cli.log-level"))
+                .withArgName(Messages.message("cli.arg.loglevel"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("name")
+                .withDescription(Messages.message("cli.name"))
+                .withArgName(Messages.message("cli.arg.name"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("no-intro")
+                .withDescription(Messages.message("cli.no-intro"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("no-java-check")
+                .withDescription(Messages.message("cli.no-java-check"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("no-memory-check")
+                .withDescription(Messages.message("cli.no-memory-check"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("no-sound")
+                .withDescription(Messages.message("cli.no-sound"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("no-splash")
+                .withDescription(Messages.message("cli.no-splash"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("private")
+                .withDescription(Messages.message("cli.private"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("seed")
+                .withDescription(Messages.message("cli.seed"))
+                .withArgName(Messages.message("cli.arg.seed"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("server")
+                .withDescription(Messages.message("cli.server"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("server-name")
+                .withDescription(Messages.message("cli.server-name"))
+                .withArgName(Messages.message("cli.arg.name"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("server-port")
+                .withDescription(Messages.message("cli.server-port"))
+                .withArgName(Messages.message("cli.arg.port"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("splash")
+                .withDescription(Messages.message("cli.splash"))
+                .withArgName(Messages.message("cli.arg.file"))
+                .hasOptionalArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("tc")
+                .withDescription(Messages.message("cli.tc"))
+                .withArgName(Messages.message("cli.arg.name"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("timeout")
+                .withDescription(Messages.message("cli.timeout"))
+                .withArgName(Messages.message("cli.arg.timeout"))
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("user-cache-directory")
+                .withDescription(Messages.message("cli.user-cache-directory"))
+                .withArgName(argDirectory)
+                .withType(dummy)
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("user-config-directory")
+                .withDescription(Messages.message("cli.user-config-directory"))
+                .withArgName(argDirectory)
+                .withType(dummy)
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("user-data-directory")
+                .withDescription(Messages.message("cli.user-data-directory"))
+                .withArgName(argDirectory)
+                .withType(dummy)
+                .hasArg()
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("version")
+                .withDescription(Messages.message("cli.version"))
+                .create());
+    	options.addOption(OptionBuilder.withLongOpt("windowed")
+                .withDescription(Messages.message("cli.windowed"))
+                .withArgName(Messages.message("cli.arg.dimensions"))
+                .hasOptionalArg()
+                .create());
+    }
+    
+    private static void hasOptionHelpOrUsage(CommandLine line, Options options) {
+    	if (line.hasOption("help") || line.hasOption("usage")) {
+            printUsage(options, 0);
+        }
+    }
+    
+    private static void handleOptionAdvantages(CommandLine line) {
+    	if (line.hasOption("advantages")) {
+            String arg = line.getOptionValue("advantages");
+            Advantages a = selectAdvantages(arg);
+            if (a == null) {
+                fatal(StringTemplate.template("cli.error.advantages")
+                    .addName("%advantages%", getValidAdvantages())
+                    .addName("%arg%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionCheckSaveGame(CommandLine line) {
+    	if (line.hasOption("check-savegame")) {
+            String arg = line.getOptionValue("check-savegame");
+            if (!FreeColDirectories.setSavegameFile(arg)) {
+                fatal(StringTemplate.template("cli.err.save")
+                    .addName("%string%", arg));
+            }
+            checkIntegrity = true;
+            standAloneServer = true;
+        }
+    }
+    
+    private static void handleClientOptions(CommandLine line) {
+    	if (line.hasOption("clientOptions")) {
+            String fileName = line.getOptionValue("clientOptions");
+            if (!FreeColDirectories.setClientOptionsFile(fileName)) {
+                // Not fatal.
+                gripe(StringTemplate.template("cli.error.clientOptions")
+                    .addName("%string%", fileName));
+            }
+        }
+    }
+    
+    private static void handleOptionDebug(CommandLine line) {
+    	if (line.hasOption("debug")) {
+            // If the optional argument is supplied use limited mode.
+            String arg = line.getOptionValue("debug");
+            if (arg == null || arg.isEmpty()) {
+                // Let empty argument default to menus functionality.
+                arg = FreeColDebugger.DebugMode.MENUS.toString();
+            }
+            if (!FreeColDebugger.setDebugModes(arg)) { // Not fatal.
+                gripe(StringTemplate.template("cli.error.debug")
+                    .addName("%modes%", FreeColDebugger.getDebugModes()));
+            }
+            // user set log level has precedence
+            if (!line.hasOption("log-level")) logLevel = Level.FINEST;
+        }
+    }
+    
+    private static void handleOptionDifficulty(CommandLine line) {
+    	if (line.hasOption("difficulty")) {
+            String arg = line.getOptionValue("difficulty");
+            String difficulty = selectDifficulty(arg);
+            if (difficulty == null) {
+                fatal(StringTemplate.template("cli.error.difficulties")
+                    .addName("%difficulties%", getValidDifficulties())
+                    .addName("%arg%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionEuropeans(CommandLine line) {
+    	if (line.hasOption("europeans")) {
+            int e = selectEuropeanCount(line.getOptionValue("europeans"));
+            if (e < 0) {
+                gripe(StringTemplate.template("cli.error.europeans")
+                    .addAmount("%min%", EUROPEANS_MIN));
+            }
+        }
+    }
+    
+    private static void handleOptionGUIScale(CommandLine line) {
+    	if (line.hasOption("gui-scale")) {
+            String arg = line.getOptionValue("gui-scale");
+            if(!setGUIScale(arg)) {
+                gripe(StringTemplate.template("cli.error.gui-scale")
+                    .addName("%scales%", getValidGUIScales())
+                    .addName("%arg%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionLoadSaveGame(CommandLine line) {
+    	if (line.hasOption("load-savegame")) {
+            String arg = line.getOptionValue("load-savegame");
+            if (!FreeColDirectories.setSavegameFile(arg)) {
+                fatal(StringTemplate.template("cli.error.save")
+                    .addName("%string%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionServerPort(CommandLine line) {
+    	if (line.hasOption("server-port")) {
+            String arg = line.getOptionValue("server-port");
+            if (!setServerPort(arg)) {
+                fatal(StringTemplate.template("cli.error.serverPort")
+                    .addName("%string%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionSplash(CommandLine line) {
+    	if (line.hasOption("splash")) {
+            String splash = line.getOptionValue("splash");
+            try {
+                FileInputStream fis = new FileInputStream(splash);
+                splashStream = fis;
+            } catch (FileNotFoundException fnfe) {
+                gripe(StringTemplate.template("cli.error.splash")
+                    .addName("%name%", splash));
+            }
+        }
+    }
+    
+    private static void handleOptionTimeout(CommandLine line) {
+    	if (line.hasOption("timeout")) {
+            String arg = line.getOptionValue("timeout");
+            if (!setTimeout(arg)) { // Not fatal
+                gripe(StringTemplate.template("cli.error.timeout")
+                    .addName("%string%", arg)
+                    .addName("%minimum%", Integer.toString(TIMEOUT_MIN)));
+            }
+        }
+    }
+    
+    private static void handleOptionUserCacheDirectory(CommandLine line) {
+    	if (line.hasOption("user-cache-directory")) {
+            String arg = line.getOptionValue("user-cache-directory");
+            String errMsg = FreeColDirectories.setUserCacheDirectory(arg);
+            if (errMsg != null) { // Not fatal.
+                gripe(StringTemplate.template(errMsg)
+                    .addName("%string%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionUserConfigDirectory(CommandLine line) {
+    	if (line.hasOption("user-config-directory")) {
+            String arg = line.getOptionValue("user-config-directory");
+            String errMsg = FreeColDirectories.setUserConfigDirectory(arg);
+            if (errMsg != null) { // Not fatal.
+                gripe(StringTemplate.template(errMsg)
+                    .addName("%string%", arg));
+            }
+        }
+    }
+    
+    private static void handleOptionUserDataDirectory(CommandLine line) {
+    	if (line.hasOption("user-data-directory")) {
+            String arg = line.getOptionValue("user-data-directory");
+            String errMsg = FreeColDirectories.setUserDataDirectory(arg);
+            if (errMsg != null) { // Fatal, unable to save.
+                fatal(StringTemplate.template(errMsg)
+                    .addName("%string%", arg));
+            }
+        }
+    }
 
     /**
      * Processes the command-line arguments and takes appropriate
@@ -430,197 +787,19 @@ public final class FreeCol {
         final String argDirectory = Messages.message("cli.arg.directory");
 
         // Help options.
-        options.addOption(OptionBuilder.withLongOpt("usage")
-                          .withDescription(help)
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("help")
-                          .withDescription(help)
-                          .create());
+        addHelpOptions(options, help);
 
         // Special options handled early.
-        options.addOption(OptionBuilder.withLongOpt("freecol-data")
-                          .withDescription(Messages.message("cli.freecol-data"))
-                          .withArgName(argDirectory)
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("default-locale")
-                          .withDescription(Messages.message("cli.default-locale"))
-                          .withArgName(Messages.message("cli.arg.locale"))
-                          .hasArg()
-                          .create());
+        addSpecialOptions(options, help, argDirectory);
 
         // Ordinary options, handled here.
-        options.addOption(OptionBuilder.withLongOpt("advantages")
-                          .withDescription(Messages.message(StringTemplate
-                                  .template("cli.advantages")
-                                  .addName("%advantages%", getValidAdvantages())))
-                          .withArgName(Messages.message("cli.arg.advantages"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("check-savegame")
-                          .withDescription(Messages.message("cli.check-savegame"))
-                          .withArgName(Messages.message("cli.arg.file"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("clientOptions")
-                          .withDescription(Messages.message("cli.clientOptions"))
-                          .withArgName(Messages.message("cli.arg.clientOptions"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("debug")
-                          .withDescription(Messages.message(StringTemplate
-                                  .template("cli.debug")
-                                  .addName("%modes%", FreeColDebugger.getDebugModes())))
-                          .withArgName(Messages.message("cli.arg.debug"))
-                          .hasOptionalArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("debug-run")
-                          .withDescription(Messages.message("cli.debug-run"))
-                          .withArgName(Messages.message("cli.arg.debugRun"))
-                          .hasOptionalArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("debug-start")
-                          .withDescription(Messages.message("cli.debug-start"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("difficulty")
-                          .withDescription(Messages.message("cli.difficulty"))
-                          .withArgName(Messages.message("cli.arg.difficulty"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("europeans")
-                          .withDescription(Messages.message("cli.european-count"))
-                          .withArgName(Messages.message("cli.arg.europeans"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("fast")
-                          .withDescription(Messages.message("cli.fast"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("font")
-                          .withDescription(Messages.message("cli.font"))
-                          .withArgName(Messages.message("cli.arg.font"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("full-screen")
-                          .withDescription(Messages.message("cli.full-screen"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("gui-scale")
-                          .withDescription(Messages.message(StringTemplate
-                                  .template("cli.gui-scale")
-                                  .addName("%scales%", getValidGUIScales())))
-                          .withArgName(Messages.message("cli.arg.gui-scale"))
-                          .hasOptionalArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("headless")
-                          .withDescription(Messages.message("cli.headless"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("load-savegame")
-                          .withDescription(Messages.message("cli.load-savegame"))
-                          .withArgName(Messages.message("cli.arg.file"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("log-console")
-                          .withDescription(Messages.message("cli.log-console"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("log-file")
-                          .withDescription(Messages.message("cli.log-file"))
-                          .withArgName(Messages.message("cli.arg.name"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("log-level")
-                          .withDescription(Messages.message("cli.log-level"))
-                          .withArgName(Messages.message("cli.arg.loglevel"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("name")
-                          .withDescription(Messages.message("cli.name"))
-                          .withArgName(Messages.message("cli.arg.name"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("no-intro")
-                          .withDescription(Messages.message("cli.no-intro"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("no-java-check")
-                          .withDescription(Messages.message("cli.no-java-check"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("no-memory-check")
-                          .withDescription(Messages.message("cli.no-memory-check"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("no-sound")
-                          .withDescription(Messages.message("cli.no-sound"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("no-splash")
-                          .withDescription(Messages.message("cli.no-splash"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("private")
-                          .withDescription(Messages.message("cli.private"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("seed")
-                          .withDescription(Messages.message("cli.seed"))
-                          .withArgName(Messages.message("cli.arg.seed"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("server")
-                          .withDescription(Messages.message("cli.server"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("server-name")
-                          .withDescription(Messages.message("cli.server-name"))
-                          .withArgName(Messages.message("cli.arg.name"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("server-port")
-                          .withDescription(Messages.message("cli.server-port"))
-                          .withArgName(Messages.message("cli.arg.port"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("splash")
-                          .withDescription(Messages.message("cli.splash"))
-                          .withArgName(Messages.message("cli.arg.file"))
-                          .hasOptionalArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("tc")
-                          .withDescription(Messages.message("cli.tc"))
-                          .withArgName(Messages.message("cli.arg.name"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("timeout")
-                          .withDescription(Messages.message("cli.timeout"))
-                          .withArgName(Messages.message("cli.arg.timeout"))
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("user-cache-directory")
-                          .withDescription(Messages.message("cli.user-cache-directory"))
-                          .withArgName(argDirectory)
-                          .withType(dummy)
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("user-config-directory")
-                          .withDescription(Messages.message("cli.user-config-directory"))
-                          .withArgName(argDirectory)
-                          .withType(dummy)
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("user-data-directory")
-                          .withDescription(Messages.message("cli.user-data-directory"))
-                          .withArgName(argDirectory)
-                          .withType(dummy)
-                          .hasArg()
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("version")
-                          .withDescription(Messages.message("cli.version"))
-                          .create());
-        options.addOption(OptionBuilder.withLongOpt("windowed")
-                          .withDescription(Messages.message("cli.windowed"))
-                          .withArgName(Messages.message("cli.arg.dimensions"))
-                          .hasOptionalArg()
-                          .create());
+        addOrdinaryOptions(options, help, dummy, argDirectory);
 
         CommandLineParser parser = new PosixParser();
         boolean usageError = false;
         try {
             CommandLine line = parser.parse(options, args);
-            if (line.hasOption("help") || line.hasOption("usage")) {
-                printUsage(options, 0);
-            }
+            hasOptionHelpOrUsage(line, options);
 
             if (line.hasOption("default-locale")) {
                 ; // Do nothing, already handled in main().
@@ -629,49 +808,14 @@ public final class FreeCol {
                 ; // Do nothing, already handled in main().
             }
 
-            if (line.hasOption("advantages")) {
-                String arg = line.getOptionValue("advantages");
-                Advantages a = selectAdvantages(arg);
-                if (a == null) {
-                    fatal(StringTemplate.template("cli.error.advantages")
-                        .addName("%advantages%", getValidAdvantages())
-                        .addName("%arg%", arg));
-                }
-            }
-
-            if (line.hasOption("check-savegame")) {
-                String arg = line.getOptionValue("check-savegame");
-                if (!FreeColDirectories.setSavegameFile(arg)) {
-                    fatal(StringTemplate.template("cli.err.save")
-                        .addName("%string%", arg));
-                }
-                checkIntegrity = true;
-                standAloneServer = true;
-            }
-
-            if (line.hasOption("clientOptions")) {
-                String fileName = line.getOptionValue("clientOptions");
-                if (!FreeColDirectories.setClientOptionsFile(fileName)) {
-                    // Not fatal.
-                    gripe(StringTemplate.template("cli.error.clientOptions")
-                        .addName("%string%", fileName));
-                }
-            }
-
-            if (line.hasOption("debug")) {
-                // If the optional argument is supplied use limited mode.
-                String arg = line.getOptionValue("debug");
-                if (arg == null || arg.isEmpty()) {
-                    // Let empty argument default to menus functionality.
-                    arg = FreeColDebugger.DebugMode.MENUS.toString();
-                }
-                if (!FreeColDebugger.setDebugModes(arg)) { // Not fatal.
-                    gripe(StringTemplate.template("cli.error.debug")
-                        .addName("%modes%", FreeColDebugger.getDebugModes()));
-                }
-                // user set log level has precedence
-                if (!line.hasOption("log-level")) logLevel = Level.FINEST;
-            }
+            handleOptionAdvantages(line);
+            
+            handleOptionCheckSaveGame(line);
+            
+            handleClientOptions(line);
+            
+            handleOptionDebug(line);
+            
             if (line.hasOption("debug-run")) {
                 FreeColDebugger.enableDebugMode(FreeColDebugger.DebugMode.MENUS);
                 FreeColDebugger.configureDebugRun(line.getOptionValue("debug-run"));
@@ -681,23 +825,9 @@ public final class FreeCol {
                 FreeColDebugger.enableDebugMode(FreeColDebugger.DebugMode.MENUS);
             }
 
-            if (line.hasOption("difficulty")) {
-                String arg = line.getOptionValue("difficulty");
-                String difficulty = selectDifficulty(arg);
-                if (difficulty == null) {
-                    fatal(StringTemplate.template("cli.error.difficulties")
-                        .addName("%difficulties%", getValidDifficulties())
-                        .addName("%arg%", arg));
-                }
-            }
+            handleOptionDifficulty(line);
 
-            if (line.hasOption("europeans")) {
-                int e = selectEuropeanCount(line.getOptionValue("europeans"));
-                if (e < 0) {
-                    gripe(StringTemplate.template("cli.error.europeans")
-                        .addAmount("%min%", EUROPEANS_MIN));
-                }
-            }
+            handleOptionEuropeans(line);
 
             if (line.hasOption("fast")) {
                 fastStart = true;
@@ -712,26 +842,13 @@ public final class FreeCol {
                 windowSize = null;
             }
 
-            if (line.hasOption("gui-scale")) {
-                String arg = line.getOptionValue("gui-scale");
-                if(!setGUIScale(arg)) {
-                    gripe(StringTemplate.template("cli.error.gui-scale")
-                        .addName("%scales%", getValidGUIScales())
-                        .addName("%arg%", arg));
-                }
-            }
+            handleOptionGUIScale(line);
 
             if (line.hasOption("headless")) {
                 headless = true;
             }
 
-            if (line.hasOption("load-savegame")) {
-                String arg = line.getOptionValue("load-savegame");
-                if (!FreeColDirectories.setSavegameFile(arg)) {
-                    fatal(StringTemplate.template("cli.error.save")
-                        .addName("%string%", arg));
-                }
-            }
+            handleOptionLoadSaveGame(line);
 
             if (line.hasOption("log-console")) {
                 consoleLogging = true;
@@ -773,68 +890,26 @@ public final class FreeCol {
             if (line.hasOption("server-name")) {
                 serverName = line.getOptionValue("server-name");
             }
-            if (line.hasOption("server-port")) {
-                String arg = line.getOptionValue("server-port");
-                if (!setServerPort(arg)) {
-                    fatal(StringTemplate.template("cli.error.serverPort")
-                        .addName("%string%", arg));
-                }
-            }
+            
+            handleOptionServerPort(line);
 
             if (line.hasOption("seed")) {
                 FreeColSeed.setFreeColSeed(line.getOptionValue("seed"));
             }
 
-            if (line.hasOption("splash")) {
-                String splash = line.getOptionValue("splash");
-                try {
-                    FileInputStream fis = new FileInputStream(splash);
-                    splashStream = fis;
-                } catch (FileNotFoundException fnfe) {
-                    gripe(StringTemplate.template("cli.error.splash")
-                        .addName("%name%", splash));
-                }
-            }
+            handleOptionSplash(line);
 
             if (line.hasOption("tc")) {
                 setTC(line.getOptionValue("tc")); // Failure is deferred.
             }
 
-            if (line.hasOption("timeout")) {
-                String arg = line.getOptionValue("timeout");
-                if (!setTimeout(arg)) { // Not fatal
-                    gripe(StringTemplate.template("cli.error.timeout")
-                        .addName("%string%", arg)
-                        .addName("%minimum%", Integer.toString(TIMEOUT_MIN)));
-                }
-            }
+            handleOptionTimeout(line);
 
-            if (line.hasOption("user-cache-directory")) {
-                String arg = line.getOptionValue("user-cache-directory");
-                String errMsg = FreeColDirectories.setUserCacheDirectory(arg);
-                if (errMsg != null) { // Not fatal.
-                    gripe(StringTemplate.template(errMsg)
-                        .addName("%string%", arg));
-                }
-            }
+            handleOptionUserCacheDirectory(line);
 
-            if (line.hasOption("user-config-directory")) {
-                String arg = line.getOptionValue("user-config-directory");
-                String errMsg = FreeColDirectories.setUserConfigDirectory(arg);
-                if (errMsg != null) { // Not fatal.
-                    gripe(StringTemplate.template(errMsg)
-                        .addName("%string%", arg));
-                }
-            }
+            handleOptionUserConfigDirectory(line);
 
-            if (line.hasOption("user-data-directory")) {
-                String arg = line.getOptionValue("user-data-directory");
-                String errMsg = FreeColDirectories.setUserDataDirectory(arg);
-                if (errMsg != null) { // Fatal, unable to save.
-                    fatal(StringTemplate.template(errMsg)
-                        .addName("%string%", arg));
-                }
-            }
+            handleOptionUserDataDirectory(line);
 
             if (line.hasOption("version")) {
                 System.out.println("FreeCol " + getVersion());
