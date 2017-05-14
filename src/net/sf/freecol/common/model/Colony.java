@@ -53,7 +53,7 @@ import net.sf.freecol.common.util.RandomChoice;
  */
 public class Colony extends Settlement implements Nameable, TradeLocation {
 
-    private static final Logger logger = Logger.getLogger(Colony.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Colony.class.getName());
 
     public static final String REARRANGE_WORKERS = "rearrangeWorkers";
     public static final int LIBERTY_PER_REBEL = 200;
@@ -477,7 +477,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
         lb.add(")");
 
         Occupation occupation = getOccupationFor(unit, workTypes, lb);
-        lb.log(logger, Level.WARNING);
+        lb.log(LOGGER, Level.WARNING);
         return occupation;
     }
 
@@ -496,7 +496,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
         lb.add(getName(), ".getOccupationFor(", unit, ")");
 
         Occupation occupation = getOccupationFor(unit, userMode, lb);
-        lb.log(logger, Level.WARNING);
+        lb.log(LOGGER, Level.WARNING);
         return occupation;
     }
 
@@ -1288,7 +1288,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
             if (!traceOccupation) {
                 LogBuilder lb = new LogBuilder(64);
                 getOccupationFor(unit, false, lb);
-                lb.log(logger, Level.WARNING);
+                lb.log(LOGGER, Level.WARNING);
             }
             return false;
         }
@@ -2878,7 +2878,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
 
             int uc = getDisplayUnitCount();
             if (uc <= 0) {
-                logger.warning("Unit count fail: " + uc + " id=" + getId()
+                LOGGER.warning("Unit count fail: " + uc + " id=" + getId()
                     + " unitCount=" + getUnitCount()
                     + " scope=" + xw.getWriteScope()
                     + " player=" + xw.getWriteScope().getClient() + "\n"
