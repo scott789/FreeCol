@@ -181,25 +181,25 @@ public class ServerPlayer extends Player implements ServerModelObject {
         if (nation == null) throw new IllegalArgumentException("Null nation");
         final Specification spec = getSpecification();
 
-        this.name = nation.getRulerName();
-        this.admin = admin;
-        this.nationId = nation.getId();
-        this.immigration = 0;
+        this.data.name = nation.getRulerName();
+        this.data.admin = admin;
+        this.data.nationId = nation.getId();
+        this.data.immigration = 0;
         if (nation.isUnknownEnemy()) { // virtual "enemy privateer" player
-            this.nationType = null;
-            this.playerType = PlayerType.COLONIAL;
-            this.europe = null;
-            this.monarch = null;
-            this.gold = 0;
+            this.data.nationType = null;
+            this.data.playerType = PlayerType.COLONIAL;
+            this.data.europe = null;
+            this.data.monarch = null;
+            this.data.gold = 0;
             this.setAI(true);
         } else if (nation.getType() != null) {
-            this.nationType = nation.getType();
+            this.data.nationType = nation.getType();
             try {
-                addFeatures(nationType);
+                addFeatures(data.nationType);
             } catch (Throwable error) {
                 error.printStackTrace();
             }
-            if (nationType.isEuropean()) {
+            if (data.nationType.isEuropean()) {
                 /*
                  * Setting the amount of gold to
                  * "getGameOptions().getInteger(GameOptions.STARTING_MONEY)"
@@ -207,30 +207,30 @@ public class ServerPlayer extends Player implements ServerModelObject {
                  * just before starting the game. See
                  * "net.sf.freecol.server.control.PreGameController".
                  */
-                this.playerType = (nationType.isREF()) ? PlayerType.ROYAL
+                this.data.playerType = (data.nationType.isREF()) ? PlayerType.ROYAL
                     : PlayerType.COLONIAL;
-                this.europe = new ServerEurope(game, this);
+                this.data.europe = new ServerEurope(game, this);
                 initializeHighSeas();
-                if (this.playerType == PlayerType.COLONIAL) {
-                    this.monarch = new Monarch(game, this);
+                if (this.data.playerType == PlayerType.COLONIAL) {
+                    this.data.monarch = new Monarch(game, this);
                     // In BR#2615 misiulo reports that Col1 players start
                     // with 2 crosses.  This is surprising, but you could
                     // argue that some level of religious unrest might
                     // contribute to the fact there is an expedition to
                     // the new world underway.
-                    this.immigration = spec.getInteger(GameOptions.PLAYER_IMMIGRATION_BONUS);
+                    this.data.immigration = spec.getInteger(GameOptions.PLAYER_IMMIGRATION_BONUS);
                 }
-                this.gold = 0;
+                this.data.gold = 0;
             } else { // indians
-                this.playerType = PlayerType.NATIVE;
-                this.gold = Player.GOLD_NOT_ACCOUNTED;
+                this.data.playerType = PlayerType.NATIVE;
+                this.data.gold = Player.GOLD_NOT_ACCOUNTED;
             }
         } else {
             throw new IllegalArgumentException("Bogus nation: " + nation);
         }
-        this.market = new Market(getGame(), this);
-        this.liberty = 0;
-        this.currentFather = null;
+        this.data.market = new Market(getGame(), this);
+        this.data.liberty = 0;
+        this.data.currentFather = null;
 
         this.socket = socket;
         this.connection = connection;
@@ -370,7 +370,7 @@ public class ServerPlayer extends Player implements ServerModelObject {
 
         // Set initial immigration target
         int i0 = spec.getInteger(GameOptions.INITIAL_IMMIGRATION);
-        immigrationRequired = (int)applyModifiers((float)i0, null,
+        data.immigrationRequired = (int)applyModifiers((float)i0, null,
             Modifier.RELIGIOUS_UNREST_BONUS);
 
         // Add initial gold
@@ -659,27 +659,27 @@ public class ServerPlayer extends Player implements ServerModelObject {
         }
 
         // Remove European stuff
-        if (market != null) {
-            market.dispose();
-            market = null;
+        if (data.market != null) {
+            data.market.dispose();
+            data.market = null;
         }
-        if (monarch != null) {
-            monarch.dispose();
-            monarch = null;
+        if (data.monarch != null) {
+            data.monarch.dispose();
+            data.monarch = null;
         }
-        if (europe != null) {
-            europe.dispose();
-            europe = null;
+        if (data.europe != null) {
+            data.europe.dispose();
+            data.europe = null;
         }
-        currentFather = null;
-        if (foundingFathers != null) foundingFathers.clear();
-        if (offeredFathers != null) offeredFathers.clear();
+        data.currentFather = null;
+        if (data.foundingFathers != null) data.foundingFathers.clear();
+        if (data.offeredFathers != null) data.offeredFathers.clear();
         // FIXME: stance and tension?
-        if (tradeRoutes != null) tradeRoutes.clear();
+        if (data.tradeRoutes != null) data.tradeRoutes.clear();
         // Retaining model messages for now
         // Retaining history for now
-        if (lastSales != null) lastSales = null;
-        featureContainer.clear();
+        if (data.lastSales != null) data.lastSales = null;
+        data.featureContainer.clear();
 
         invalidateCanSeeTiles();//+vis(this)
     }
@@ -721,14 +721,14 @@ public class ServerPlayer extends Player implements ServerModelObject {
      */
     public FoundingFather checkFoundingFather() {
         FoundingFather father = null;
-        if (currentFather != null) {
+        if (data.currentFather != null) {
             int extraLiberty = getRemainingFoundingFatherCost();
             if (extraLiberty <= 0) {
                 boolean overflow = getSpecification()
                     .getBoolean(GameOptions.SAVE_PRODUCTION_OVERFLOW);
                 setLiberty((overflow) ? -extraLiberty : 0);
-                father = currentFather;
-                currentFather = null;
+                father = data.currentFather;
+                data.currentFather = null;
             }
         }
         return father;
@@ -750,7 +750,7 @@ public class ServerPlayer extends Player implements ServerModelObject {
         default:
             return false;
         }
-        return canHaveFoundingFathers() && currentFather == null
+        return canHaveFoundingFathers() && data.currentFather == null
             && !getSettlements().isEmpty()
             && getFatherCount() < spec.getFoundingFathers().size();
     }
@@ -806,7 +806,7 @@ public class ServerPlayer extends Player implements ServerModelObject {
      */
     @Override
     public void addHistory(HistoryEvent event) {
-        history.add(event);
+        data.history.add(event);
     }
 
     /**
@@ -827,15 +827,15 @@ public class ServerPlayer extends Player implements ServerModelObject {
      * @return True if the player score changed.
      */
     public boolean updateScore() {
-        int oldScore = score;
-        score = getUnits().stream()
+        int oldScore = data.score;
+        data.score = getUnits().stream()
                 .mapToInt(u -> u.getType().getScoreValue()).sum()
             + getColonies().stream()
                 .mapToInt(c -> c.getLiberty()).sum()
             + SCORE_FOUNDING_FATHER * getFathers().size();
         int gold = getGold();
         if (gold != GOLD_NOT_ACCOUNTED) {
-            score += (int)Math.floor(SCORE_GOLD * gold);
+            data.score += (int)Math.floor(SCORE_GOLD * gold);
         }
         
         int bonus = 0;
@@ -851,14 +851,14 @@ public class ServerPlayer extends Player implements ServerModelObject {
                     }
                     break;
                 default:
-                    score += h.getScore();
+                    data.score += h.getScore();
                     break;
                 }
             }
         }
-        score += (score * bonus) / 100;
+        data.score += (data.score * bonus) / 100;
 
-        return score != oldScore;
+        return data.score != oldScore;
     }
 
     /**
@@ -1387,22 +1387,22 @@ public class ServerPlayer extends Player implements ServerModelObject {
         int numberOfColonies = settlements.size();
         if (numberOfColonies > 0) {
             newSoL = newSoL / numberOfColonies;
-            if (oldSoL / 10 != newSoL / 10) {
+            if (data.oldSoL / 10 != newSoL / 10) {
                 cs.addMessage(See.only(this),
                     new ModelMessage(ModelMessage.MessageType.SONS_OF_LIBERTY,
-                                     (newSoL > oldSoL)
+                                     (newSoL > data.oldSoL)
                                      ? "model.player.soLIncrease"
                                      : "model.player.soLDecrease", this)
-                              .addAmount("%oldSoL%", oldSoL)
+                              .addAmount("%oldSoL%", data.oldSoL)
                               .addAmount("%newSoL%", newSoL));
             }
-            oldSoL = newSoL; // Remember SoL for check changes at next turn.
+            data.oldSoL = newSoL; // Remember SoL for check changes at next turn.
         }
 
         // Europe.
-        if (europe != null) {
-            ((ServerModelObject) europe).csNewTurn(random, lb, cs);
-            modifyImmigration(europe.getImmigration(newImmigration));
+        if (data.europe != null) {
+            ((ServerModelObject) data.europe).csNewTurn(random, lb, cs);
+            modifyImmigration(data.europe.getImmigration(newImmigration));
         }
         // Units.
         for (Unit unit : new ArrayList<>(getUnits())) {
@@ -1434,9 +1434,9 @@ public class ServerPlayer extends Player implements ServerModelObject {
                 csNaturalDisasters(random, cs, probability);
             }
 
-            if (isRebel() && interventionBells
+            if (isRebel() && data.interventionBells
                 >= getSpecification().getInteger(GameOptions.INTERVENTION_BELLS)) {
-                interventionBells = Integer.MIN_VALUE;
+                data.interventionBells = Integer.MIN_VALUE;
                 
                 // Enter near a port.
                 List<Colony> ports = getPorts();
@@ -4083,7 +4083,7 @@ public class ServerPlayer extends Player implements ServerModelObject {
             colony.getGoodsContainer().saveState();
             colony.removeGoods(goodsType, amount);
 
-            int arrears = market.getPaidForSale(goodsType)
+            int arrears = data.market.getPaidForSale(goodsType)
                 * spec.getInteger(GameOptions.ARREARS_FACTOR);
             Market market = getMarket();
             market.setArrears(goodsType, arrears);
