@@ -73,7 +73,6 @@ public class GenerateDocumentation {
             Arrays.sort(args);
         }
         readResources();
-        //generateTMX();
         generateDocumentation(args);
     }
 
@@ -99,75 +98,6 @@ public class GenerateDocumentation {
         }
     }
 
-
-    private static void generateTMX() {
-
-        Map<String, Map<String, String>> translations = new HashMap<>();
-
-        for (String name : sourceFiles) {
-
-            System.out.println("Processing source file: " + name);
-
-            String languageCode = name.substring(15, name.length() - 11);
-            if (languageCode.isEmpty()) {
-                languageCode = "en";
-            } else if ('_' == languageCode.charAt(0)) {
-                languageCode = languageCode.substring(1);
-            } else {
-                // don't know what to do
-                continue;
-            }
-
-            File sourceFile = new File(STRING_DIRECTORY, name);
-
-            try (
-                FileReader fileReader = new FileReader(sourceFile);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-            ) {
-                String line = bufferedReader.readLine();
-                while (line != null) {
-                    int index = line.indexOf('=');
-                    if (index >= 0) {
-                        String key = line.substring(0, index).trim();
-                        String value = line.substring(index + 1).trim()
-                            .replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
-                        Map<String, String> map = translations.get(key);
-                        if (map == null) {
-                            map = new HashMap<>();
-                            translations.put(key, map);
-                        }
-                        map.put(languageCode, value);
-                    }
-                    line = bufferedReader.readLine();
-                }
-            } catch (Exception e) {
-                // forget it
-            }
-        }
-        File destinationFile = new File(DESTINATION_DIRECTORY, "freecol.tmx");
-        try (
-            FileWriter out = new FileWriter(destinationFile);
-        ) {
-            out.write("<?xml version =\"1.0\" encoding=\"UTF-8\"?>\n");
-            out.write("<tmx version=\"1.4b\">\n");
-            out.write("<body>\n");
-            for (Map.Entry<String, Map<String, String>> tu : translations.entrySet()) {
-                out.write("  <tu tuid=\"" + tu.getKey() + "\">\n");
-                for (Map.Entry<String, String> tuv : tu.getValue().entrySet()) {
-                    out.write("    <tuv xml:lang=\"" + tuv.getKey() + "\">\n");
-                    out.write("      <seg>" + tuv.getValue() + "</seg>\n");
-                    out.write("    </tuv>\n");
-                }
-                out.write("  </tu>\n");
-            }
-            out.write("</body>\n");
-            out.write("</tmx>\n");
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void generateDocumentation(String[] languages) {
         for (String name : sourceFiles) {
 
@@ -184,8 +114,7 @@ public class GenerateDocumentation {
                 // don't know what to do
                 continue;
             }
-            if (languages.length == 0
-                || Arrays.binarySearch(languages, languageCode) >= 0) {
+            if (languages.length == 0 || Arrays.binarySearch(languages, languageCode) >= 0) {
                 System.out.println("Generating localized documentation for language code "
                                    + languageCode);
 
