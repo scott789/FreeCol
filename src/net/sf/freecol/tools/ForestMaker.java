@@ -122,14 +122,11 @@ public class ForestMaker {
     public static void main(String[] args) throws Exception {
 
         if (args.length == 0) {
-            System.out.println("Usage: ForestMaker <directory>...");
-            System.out.println("Directory name should match a directory in");
-            System.out.println("   " + DESTDIR);
+            printErrorMessage();
             System.exit(1);
         }
 
-        String riverName = "data/rules/classic/resources/images/terrain/"
-            + "ocean/center0.png";
+        String riverName = "data/rules/classic/resources/images/terrain/" + "ocean/center0.png";
         BufferedImage river = ImageIO.read(new File(riverName));
         // grab a rectangle completely filled with water
         river = river.getSubimage(44, 22, 40, 20);
@@ -309,6 +306,13 @@ public class ForestMaker {
 
             }
         }
+    }
+    
+    private static void printErrorMessage()
+    {
+    	System.out.println("Usage: ForestMaker <directory>...");
+        System.out.println("Directory name should match a directory in");
+        System.out.println("   " + DESTDIR);
     }
 
     private static int getY(int x, int y, double slope, int newX) {
