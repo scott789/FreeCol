@@ -53,7 +53,7 @@ import net.sf.freecol.common.util.RandomChoice;
  */
 public class Colony extends Settlement implements Nameable, TradeLocation {
 
-    private static final Logger logger = Logger.getLogger(Colony.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Colony.class.getName());
 
     public static final String REARRANGE_WORKERS = "rearrangeWorkers";
     public static final int LIBERTY_PER_REBEL = 200;
@@ -477,7 +477,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
         lb.add(")");
 
         Occupation occupation = getOccupationFor(unit, workTypes, lb);
-        lb.log(logger, Level.WARNING);
+        lb.log(LOGGER, Level.WARNING);
         return occupation;
     }
 
@@ -492,11 +492,11 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
      *     null if none found.
      */
     private Occupation getOccupationFor(Unit unit, boolean userMode) {
-        LogBuilder lb = new LogBuilder((getOccupationTrace()) ? 64 : 0);
-        lb.add(getName(), ".getOccupationFor(", unit, ")");
+        final LogBuilder logBuilder = new LogBuilder((getOccupationTrace()) ? 64 : 0);
+        logBuilder.add(getName(), ".getOccupationFor(", unit, ")");
 
-        Occupation occupation = getOccupationFor(unit, userMode, lb);
-        lb.log(logger, Level.WARNING);
+        final Occupation occupation = getOccupationFor(unit, userMode, logBuilder);
+        logBuilder.log(LOGGER, Level.WARNING);
         return occupation;
     }
 
@@ -706,7 +706,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
      */
     public WorkLocation getWorkLocationFor(Unit unit, GoodsType goodsType) {
         if (goodsType == null) return getWorkLocationFor(unit);
-        Occupation occupation
+        final Occupation occupation
             = getOccupationFor(unit, goodsType.getEquivalentTypes());
         return (occupation == null) ? null : occupation.workLocation;
     }
@@ -718,7 +718,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
      * @return The best <code>WorkLocation</code> found.
      */
     public WorkLocation getWorkLocationFor(Unit unit) {
-        Occupation occupation = getOccupationFor(unit, false);
+        final Occupation occupation = getOccupationFor(unit, false);
         return (occupation == null) ? null : occupation.workLocation;
     }
 
@@ -729,7 +729,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
      * @return True if this tile is actively in use by this colony.
      */
     public boolean isTileInUse(Tile tile) {
-        ColonyTile colonyTile = getColonyTile(tile);
+        final ColonyTile colonyTile = getColonyTile(tile);
         return colonyTile != null && !colonyTile.isEmpty();
     }
 
@@ -768,7 +768,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
      * @return The stockade key, or null if no stockade-building is present.
      */
     public String getStockadeKey() {
-        Building stockade = getStockade();
+        final Building stockade = getStockade();
         return (stockade == null) ? null : stockade.getType().getSuffix();
     }
 
@@ -780,7 +780,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
      * @return A weighted list of <code>Disaster</code>s.
      */
     public List<RandomChoice<Disaster>> getDisasters() {
-        List<RandomChoice<Disaster>> disasters = new ArrayList<>();
+        final List<RandomChoice<Disaster>> disasters = new ArrayList<>();
         for (ColonyTile tile : colonyTiles) {
             disasters.addAll(tile.getWorkTile().getDisasters());
         }
@@ -1288,7 +1288,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
             if (!traceOccupation) {
                 LogBuilder lb = new LogBuilder(64);
                 getOccupationFor(unit, false, lb);
-                lb.log(logger, Level.WARNING);
+                lb.log(LOGGER, Level.WARNING);
             }
             return false;
         }
@@ -2878,7 +2878,7 @@ public class Colony extends Settlement implements Nameable, TradeLocation {
 
             int uc = getDisplayUnitCount();
             if (uc <= 0) {
-                logger.warning("Unit count fail: " + uc + " id=" + getId()
+                LOGGER.warning("Unit count fail: " + uc + " id=" + getId()
                     + " unitCount=" + getUnitCount()
                     + " scope=" + xw.getWriteScope()
                     + " player=" + xw.getWriteScope().getClient() + "\n"
