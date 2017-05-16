@@ -62,30 +62,16 @@ public class RiverMaker {
 
     public static void main(String[] args) throws Exception {
 
-        String riverName = "data/rules/classic/resources/images/terrain/"
-            + "ocean/center0.png";
+        String riverName = "data/rules/classic/resources/images/terrain/" + "ocean/center0.png";
         String riverDir = "data/rules/classic/resources/images/river";
         BufferedImage river = ImageIO.read(new File(riverName));
+        
         // grab a rectangle completely filled with water
         river = river.getSubimage(44, 22, 40, 20);
         Rectangle2D rectangle = new Rectangle(0, 0, river.getWidth(), river.getHeight());
         TexturePaint texture = new TexturePaint(river, rectangle);
         Stroke minor = new BasicStroke(4);
         Stroke major = new BasicStroke(6);
-
-        //         float seg = EDGE_LENGTH / 6;
-
-        // Path2D.Float straight = new Path2D.Float();
-        // straight.moveTo(0, 0);
-        // straight.quadTo(seg, 0, 2 * seg, -4);
-        // straight.quadTo(3 * seg, -8, 4 * seg, -4);
-        // straight.quadTo(5 * seg, 0, 6 * seg, 0);
-
-        // Path2D.Float bend = new Path2D.Float();
-        // bend.moveTo(0, 0);
-        // bend.lineTo(5 * seg, 0);
-        // bend.quadTo(EDGE_LENGTH, 0, EDGE_LENGTH, seg);
-        // bend.lineTo(EDGE_LENGTH, EDGE_LENGTH);
 
         int[] branches = { 1, 0, 0, 0 };
         for (int index = 1; index < 81; index++) {
@@ -126,22 +112,6 @@ public class RiverMaker {
                 }
             }
 
-            /*
-            g.setStroke(stroke);
-            //bend.transform(AffineTransform.getRotateInstance(Math.PI/6));
-            //bend.transform(AffineTransform.getTranslateInstance(HALF_WIDTH, 0));
-            Path2D.Float path = new Path2D.Float();
-            float dx = (NW.x - SE.x)/6;
-            float dy = (NW.y - SE.y)/6;
-            path.moveTo(NW.x, NW.y);
-            //path.lineTo(SE.x, SE.y);
-            path.lineTo(SE.x - 16, SE.y - 8);
-            path.quadTo(BASE_WIDTH - 16, HALF_HEIGHT, SE.x - 16, SE.y + 8);
-            path.lineTo(SW.x, SW.y);
-            //path.moveTo(NE.x, NE.y);
-            //path.lineTo(SW.x, SW.y);
-            g.draw(path);
-            */
             g.dispose();
             ImageIO.write(result, "png", new File(riverDir, "river" + name + ".png"));
             branches = nextBranch(branches);

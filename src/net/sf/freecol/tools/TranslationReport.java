@@ -217,31 +217,43 @@ public class TranslationReport {
         }
         
         if (printSummary){
-            System.out.println(stars);
-            System.out.println("*** Summary of translation efforts (" + master.size() + " keys in master file) ***");
-            System.out.println(stars);
-            for (LanguageStatsRecord stats : statistics){
-                StringBuilder output = new StringBuilder();
-                output.append(shortenName(stats.localFile));
-                output.append(": ");
-                output.append(prettyPrint(stats.missingKeys));
-                output.append(" keys missing, ");
-                output.append(prettyPrint(stats.missingVariables));
-                output.append(" vars missing, ");
-                output.append(prettyPrint(stats.copiedKeys));
-                output.append(" entries copied, ");
-                output.append(prettyPrint(stats.superfluousKeys));
-                output.append(" redundant keys, ");
-                output.append(prettyPrint(stats.superfluousVariables));
-                output.append(" redundant vars. ");
-                
-                float percentageDone =  (100 * (master.size() - (stats.missingKeys + stats.copiedKeys))) / (float) master.size();
-                percentageDone = Math.round(percentageDone*100)/100f;
-                output.append(percentageDone).append("% finished.");
-                
-                System.out.println(output.toString());
-            }
+        	int size = master.size();
+        	printStars(size);
+        	printStistics(statistics, size);
         }
+    }
+   
+    
+    private static void printStistics(ArrayList<LanguageStatsRecord> statistics, int size)
+    {
+    	for (LanguageStatsRecord stats : statistics){
+            StringBuilder output = new StringBuilder();
+            output.append(shortenName(stats.localFile));
+            output.append(": ");
+            output.append(prettyPrint(stats.missingKeys));
+            output.append(" keys missing, ");
+            output.append(prettyPrint(stats.missingVariables));
+            output.append(" vars missing, ");
+            output.append(prettyPrint(stats.copiedKeys));
+            output.append(" entries copied, ");
+            output.append(prettyPrint(stats.superfluousKeys));
+            output.append(" redundant keys, ");
+            output.append(prettyPrint(stats.superfluousVariables));
+            output.append(" redundant vars. ");
+            
+            float percentageDone =  (100 * (size - (stats.missingKeys + stats.copiedKeys))) / (float) size;
+            percentageDone = Math.round(percentageDone*100)/100f;
+            output.append(percentageDone).append("% finished.");
+            
+            System.out.println(output.toString());
+        }
+    }
+    
+    private static void printStars(int size)
+    {
+        System.out.println(stars);
+        System.out.println("*** Summary of translation efforts (" + size + " keys in master file) ***");
+        System.out.println(stars);
     }
 
     private static StringBuilder shortenName(String localFile) {
